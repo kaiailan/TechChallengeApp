@@ -198,7 +198,7 @@ workflows:
           path: .
           repo: '${MY_APP_PREFIX}'
           tag: '${CIRCLE_SHA1}'
-      - deploy-ecs:
-          context: aws_circleci
-          requires:
-            - aws-ecr/build-and-push-image
+ #     - deploy-ecs:
+ #         context: aws_circleci
+ #         requires:
+ #           - aws-ecr/build-and-push-image
