@@ -198,4 +198,5 @@ workflows:
           path: .
           repo: '${MY_APP_PREFIX}'
           tag: '${CIRCLE_SHA1}'
-      - deploy-ecs
+      - deploy-ecs:
+          context: aws_circleci
