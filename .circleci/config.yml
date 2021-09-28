@@ -1,7 +1,10 @@
 # Golang CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-go/ for more details
-version: 2
+version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@7.2.0
+#  aws-ecs: circleci/aws-ecs@2.2.1
 jobs:
   build:
     working_directory: /go/src/github.com/servian/TechChallengeApp
@@ -160,7 +163,7 @@ jobs:
           path: output
           
 workflows:
-  version: 2
+  version: 2.1
   build_test_deploy:
     jobs:
       - build
@@ -172,3 +175,17 @@ workflows:
               only: master
             tags:
               ignore: /.*/
+  docker-build-push-ecr:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          context: aws_circleci
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_DEFAULT_REGION
+          create-repo: true
+          no-output-timeout: 20m
+          path: .
+          repo: '${MY_APP_PREFIX}'
+          tag: '${CIRCLE_SHA1}'
+
