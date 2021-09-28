@@ -164,7 +164,7 @@ jobs:
 
   deploy-ecs:
     docker:
-      - image: '${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:latest'
+      - image: '${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:${CIRCLE_SHA1}'
     steps:
       - aws-ecs/run-task:
           awsvpc: false
@@ -200,3 +200,5 @@ workflows:
           tag: '${CIRCLE_SHA1}'
       - deploy-ecs:
           context: aws_circleci
+          requires:
+            - aws-ecr/build-and-push-image
