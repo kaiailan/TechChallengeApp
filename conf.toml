@@ -2,6 +2,6 @@
 "DbPassword" = "changeme"
 "DbName" = "app"
 "DbPort" = "5432"
-"DbHost" = "localhost"
+"DbHost" = "database"
 "ListenHost" = "localhost"
 "ListenPort" = "3000"
