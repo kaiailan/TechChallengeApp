@@ -198,7 +198,9 @@ workflows:
           path: .
           repo: '${MY_APP_PREFIX}'
           tag: '${CIRCLE_SHA1}'
- #     - deploy-ecs:
- #         context: aws_circleci
- #         requires:
- #           - aws-ecr/build-and-push-image
+      - aws-ecs/deploy-service-update:
+          cluster-name: 'step2-cluster-apptest-Cluster-imTm2jpRjzkv'
+          container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'
+          family: '${MY_APP_PREFIX}-family'
+          requires:
+            - aws-ecr/build-and-push-image
