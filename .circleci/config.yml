@@ -214,8 +214,10 @@ workflows:
           repo: '${MY_APP_PREFIX}'
           tag: '${CIRCLE_SHA1}'
   deploy-cfn:
-      jobs:
-        - deploy-cfn
+    jobs:
+      - deploy-cfn:
+          context: aws_circleci
+          
 
       
       # - aws-ecs/deploy-service-update:
