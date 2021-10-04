@@ -1,0 +1,159 @@
+---
+# Copyright 2018 widdix GmbH
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'RDS Postgres template'
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+    - Label:
+        default: 'Parent Stacks'
+      Parameters:
+      - ParentVPCStack
+      - ParentClientStack
+    - Label:
+        default: 'RDS Parameters'
+      Parameters:
+      - EngineVersion
+      - DBAllocatedStorage
+      - DBInstanceClass
+      - DBName
+      - DBBackupRetentionPeriod
+      - DBMasterUsername
+      - DBMasterUserPassword
+      - DBMultiAZ
+      - PreferredBackupWindow
+      - PreferredMaintenanceWindow
+    - Label:
+        default: 'App Parameters'
+      Parameters:
+      - MyAppPrefix
+Parameters:
+  MyAppPrefix:
+    Description: 'For InstanceName: The mirror of MY_APP_PREFIX in CircleCI.'
+    Type: String
+    Default: techchallengeapp
+  ParentVPCStack:
+    Description: 'Stack name of parent VPC stack based on vpc/vpc-*azs.yaml template.'
+    Type: String
+  ParentClientStack:
+    Description: 'Stack name of parent client stack based on state/client-sg.yaml template.'
+    Type: String
+  DBAllocatedStorage:
+    Description: 'The allocated storage size, specified in GB .'
+    Type: Number
+    Default: 5
+    MinValue: 5
+    MaxValue: 16384
+  DBInstanceClass:
+    Description: 'The instance type of database server.'
+    Type: String
+    Default: 'db.t2.micro'
+  DBName:
+    Description: 'Name of the database .'
+    Type: String
+    Default: app
+  DBBackupRetentionPeriod:
+    Description: 'The number of days to keep snapshots of the database.'
+    Type: Number
+    MinValue: 0
+    MaxValue: 35
+    Default: 30
+  DBMasterUsername:
+    Description: 'The master user name for the DB instance .'
+    Type: String
+    Default: postgres
+  DBMasterUserPassword:
+    Description: 'The master password for the DB instance.'
+    Type: String
+    NoEcho: true
+  DBMultiAZ:
+    Description: 'Specifies if the database instance is deployed to multiple Availability Zones for HA.'
+    Type: String
+    Default: true
+    AllowedValues: [true, false]
+  PreferredBackupWindow:
+    Description: 'The daily time range in UTC during which you want to create automated backups.'
+    Type: String
+    Default: '09:54-10:24'
+  PreferredMaintenanceWindow:
+    Description: The weekly time range (in UTC) during which system maintenance can occur.
+    Type: String
+    Default: 'sat:07:00-sat:07:30'
+  EngineVersion:
+    Description: 'PostgreSQL version.'
+    Type: String
+    Default: '9.6.5'
+    AllowedValues: ['9.5.2', '9.5.4', '9.5.6', '9.5.7', '9.5.9', '9.5.10', '9.5.12', '9.5.13', '9.5.14', '9.5.15', '9.5.16', '9.5.18', '9.5.19', '9.5.20', '9.5.21', '9.5.22', '9.5.23', '9.6.1', '9.6.2', '9.6.3', '9.6.5', '9.6.6', '9.6.8', '9.6.9', '9.6.10', '9.6.11', '9.6.12', '9.6.14', '9.6.15', '9.6.16', '9.6.17', '9.6.18', '9.6.19', '10.1', '10.3', '10.4', '10.5', '10.6', '10.7', '10.9', '10.10', '10.11', '10.12', '10.13', '10.14', '11.1', '11.2', '11.4', '11.5', '11.6', '11.7', '11.8', '11.9', '12.2', '12.3', '12.4', '13.2'] # aws rds describe-db-engine-versions --engine postgres --query "DBEngineVersions[].EngineVersion"
+Resources:
+  DatabaseSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: !Ref 'AWS::StackName'
+      VpcId: {'Fn::ImportValue': !Sub '${ParentVPCStack}-VPC'}
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 5432
+        ToPort: 5432
+        SourceSecurityGroupId: {'Fn::ImportValue': !Sub '${ParentClientStack}-ClientSecurityGroup'}
+  DBSubnetGroup:
+    Type: 'AWS::RDS::DBSubnetGroup'
+    Properties:
+      DBSubnetGroupDescription: !Ref 'AWS::StackName'
+      SubnetIds: !Split [',', {'Fn::ImportValue': !Sub '${ParentVPCStack}-SubnetsPrivate'}]
+  DBInstance:
+    DeletionPolicy: Snapshot # default
+    UpdateReplacePolicy: Snapshot
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      AllocatedStorage: !Ref DBAllocatedStorage
+      AllowMajorVersionUpgrade: true
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: !Ref DBBackupRetentionPeriod
+      CopyTagsToSnapshot: true
+      DBInstanceClass: !Ref DBInstanceClass
+      DBInstanceIdentifier: !Sub '${MyAppPrefix}-dbinstance'
+      DBName: !Ref DBName
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      EnableIAMDatabaseAuthentication: false
+      Engine: postgres
+      EngineVersion: !Ref EngineVersion
+      MasterUsername: !Ref DBMasterUsername
+      MasterUserPassword: !Ref DBMasterUserPassword
+      MultiAZ: !Ref DBMultiAZ
+      PreferredBackupWindow: !Ref PreferredBackupWindow
+      PreferredMaintenanceWindow: !Ref PreferredMaintenanceWindow
+      StorageType: gp2
+      StorageEncrypted: false
+      VPCSecurityGroups:
+      - !Ref DatabaseSecurityGroup
+Outputs:
+  StackName:
+    Description: 'Stack name.'
+    Value: !Sub '${AWS::StackName}'
+  InstanceName:
+    Description: 'The name of the database instance.'
+    Value: !Ref DBInstance
+    Export:
+      Name: !Sub '${AWS::StackName}-InstanceName'
+  DNSName:
+    Description: 'The connection endpoint for the database.'
+    Value: !GetAtt 'DBInstance.Endpoint.Address'
+    Export:
+      Name: !Sub '${AWS::StackName}-DNSName'
+  SecurityGroupId:
+    Description: 'The security group used to manage access to RDS Postgres.'
+    Value: !Ref DatabaseSecurityGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-SecurityGroupId'
