@@ -174,8 +174,10 @@ jobs:
       - aws-cli/setup
       - run:
           name: Deploy Cloudformation Template - vpc-2azs.yaml
-          command: |
-            aws cloudformation deploy --template cfn/vpc-2azs.yaml --stack stack1-vpc
+          command:
+            >-
+            aws cloudformation deploy 
+            --template cfn/vpc-2azs.yaml --stack stack1-vpc
       - run:
           name: Deploy Cloudformation Template - client-sg.yaml
           command: |
