@@ -172,33 +172,33 @@ jobs:
       - run:
           name: Deploy Cloudformation Template - vpc-2azs.yaml
           command: |
-            aws cloudformation deploy /
-            --template cfn/vpc-2azs.yaml /
+            aws cloudformation deploy |
+            --template cfn/vpc-2azs.yaml |
             --stack stack1-vpc
       - run:
           name: Deploy Cloudformation Template - client-sg.yaml
           command: |
-            aws cloudformation deploy /
-            --template cfn/client-sg.yaml /
+            aws cloudformation deploy |
+            --template cfn/client-sg.yaml |
             --stack stack2-clientsg
       - run:
           name: Deploy Cloudformation Template - rds-postgres.yaml
           command: |
-            aws cloudformation deploy /
-            --template cfn/rds-postgres.yaml /
+            aws cloudformation deploy |
+            --template cfn/rds-postgres.yaml |
             --stack stack3-rds
       - run:
           name: Deploy Cloudformation Template - cluster.yaml
           command: |
-            aws cloudformation deploy /
-            --template cfn/cluster.yaml /
+            aws cloudformation deploy |
+            --template cfn/cluster.yaml |
             --stack stack4-cluster
       - run:
           name: Deploy Cloudformation Template - cluster.yaml
           command: |
-            aws cloudformation deploy /
-            --template cfn/cluster.yaml /
-            --stack stack5-service-alb /
+            aws cloudformation deploy |
+            --template cfn/cluster.yaml |
+            --stack stack5-service-alb |
             --parameter-overrides AppImage=${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:${CIRCLE_SHA1}
 
 workflows:
