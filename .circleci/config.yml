@@ -186,9 +186,9 @@ jobs:
           command: |
             aws cloudformation deploy --template cfn/cluster.yaml --stack stack4-cluster
       - run:
-          name: Deploy Cloudformation Template - cluster.yaml
+          name: Deploy Cloudformation Template - service-cluster-alb.yaml
           command: |
-            aws cloudformation deploy --template cfn/cluster.yaml --stack stack5-service-alb --parameter-overrides AppImage=${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:${CIRCLE_SHA1}
+            aws cloudformation deploy --template cfn/service-cluster-alb.yaml --stack stack5-service-alb --parameter-overrides AppImage=${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:${CIRCLE_SHA1}
 
 workflows:
   version: 2.1
