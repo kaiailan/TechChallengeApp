@@ -165,6 +165,9 @@ jobs:
           path: output
 
   deploy-cfn:
+    parameters:
+      image_name:
+        type: string
     executor: aws-cli/default
     steps:
       - checkout
@@ -188,7 +191,7 @@ jobs:
       - run:
           name: Deploy Cloudformation Template - service-cluster-alb.yaml
           command: |
-            aws cloudformation deploy --template cfn/service-cluster-alb.yaml --stack stack5-service-alb --capabilities CAPABILITY_NAMED_IAM --parameter-overrides AppImage='${AWS_ECR_ACCOUNT_URL}'/'${MY_APP_PREFIX}':'${CIRCLE_SHA1}'
+            aws cloudformation deploy --template cfn/service-cluster-alb.yaml --stack stack5-service-alb --capabilities CAPABILITY_NAMED_IAM --parameter-overrides AppImage=<< parameters.image_name >>
 
 workflows:
   version: 2.1
@@ -217,6 +220,7 @@ workflows:
     jobs:
       - deploy-cfn:
           context: aws_circleci
+          image_name: ${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:${CIRCLE_SHA1}
           
 
       
