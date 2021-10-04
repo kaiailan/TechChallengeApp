@@ -105,18 +105,22 @@ Parameters:
     Description: 'Optional environment variable 1 value for VTT_DBUSER.'
     Type: AWS::SSM::Parameter::Value<String>
     Default: techchallengeapp-VTT_DBUSER
+    NoEcho: true
   AppEnvironment2Value:
     Description: 'Optional environment variable 2 value for VTT_DBPASSWORD.'
     Type: AWS::SSM::Parameter::Value<String>
     Default: techchallengeapp-VTT_DBPASSWORD
+    NoEcho: true
   AppEnvironment3Value:
     Description: 'Optional environment variable 3 value for VTT_DBNAME.'
     Type: AWS::SSM::Parameter::Value<String>
     Default: techchallengeapp-VTT_DBNAME
+    NoEcho: true
   AppEnvironment4Value:
     Description: 'Optional environment variable 4 value for VTT_DBPORT.'
     Type: AWS::SSM::Parameter::Value<String>
     Default: techchallengeapp-VTT_DBPORT
+    NoEcho: true
   AppEnvironment5Value:
     Description: 'Optional environment variable 5 value for VTT_LISTENHOST.'
     Type: String
