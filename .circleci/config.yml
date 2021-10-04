@@ -177,25 +177,52 @@ jobs:
           command:
             >-
             aws cloudformation deploy 
-            --template cfn/vpc-2azs.yaml --stack stack1-vpc
+            --template cfn/vpc-2azs.yaml 
+            --stack stack1-vpc
       - run:
           name: Deploy Cloudformation Template - client-sg.yaml
-          command: |
-            aws cloudformation deploy --template cfn/client-sg.yaml --stack stack2-clientsg --parameter-overrides ParentVPCStack=stack1-vpc
+          command:
+            >-
+            aws cloudformation deploy 
+            --template cfn/client-sg.yaml 
+            --stack stack2-clientsg 
+            --parameter-overrides 
+            ParentVPCStack=stack1-vpc
       - run:
           name: Deploy Cloudformation Template - rds-postgres.yaml
           no_output_timeout: 30m
-          command: |
-            aws cloudformation deploy --template cfn/rds-postgres.yaml --stack stack3-rds --parameter-overrides ParentVPCStack=stack1-vpc ParentClientStack=stack2-clientsg
+          command:
+            >-
+            aws cloudformation deploy 
+            --template cfn/rds-postgres.yaml 
+            --stack stack3-rds 
+            --parameter-overrides 
+            ParentVPCStack=stack1-vpc 
+            ParentClientStack=stack2-clientsg
       - run:
           name: Deploy Cloudformation Template - cluster.yaml
-          command: |
-            aws cloudformation deploy --template cfn/cluster.yaml --stack stack4-cluster --parameter-overrides ParentVPCStack=stack1-vpc
+          command:
+            >-
+            aws cloudformation deploy 
+            --template cfn/cluster.yaml 
+            --stack stack4-cluster 
+            --parameter-overrides 
+            ParentVPCStack=stack1-vpc
       - run:
           name: Deploy Cloudformation Template - service-cluster-alb.yaml
           no_output_timeout: 30m
-          command: |
-            aws cloudformation deploy --template cfn/service-cluster-alb.yaml --stack stack5-service-alb --capabilities CAPABILITY_NAMED_IAM --parameter-overrides AppImage=<< parameters.image_name >> ParentVPCStack=stack1-vpc ParentDBClientStack=stack2-clientsg ParentDBServiceStack=stack3-rds ParentClusterStack=stack4-cluster
+          command:
+            >-
+            aws cloudformation deploy 
+            --template cfn/service-cluster-alb.yaml 
+            --stack stack5-service-alb 
+            --capabilities CAPABILITY_NAMED_IAM 
+            --parameter-overrides 
+            AppImage=<< parameters.image_name >> 
+            ParentVPCStack=stack1-vpc 
+            ParentDBClientStack=stack2-clientsg 
+            ParentDBServiceStack=stack3-rds 
+            ParentClusterStack=stack4-cluster
       - run:
           name: Echo loadbalancer URL
           command: |
