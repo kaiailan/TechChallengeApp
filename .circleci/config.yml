@@ -4,8 +4,6 @@
 version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@7.2.0
-  # aws-ecs: circleci/aws-ecs@2.2.1
-  # aws-cloudformation: orbss/aws-cloudformation@0.1.6
   aws-cli: circleci/aws-cli@2.0.3
 jobs:
   build:
@@ -192,6 +190,10 @@ jobs:
           name: Deploy Cloudformation Template - service-cluster-alb.yaml
           command: |
             aws cloudformation deploy --template cfn/service-cluster-alb.yaml --stack stack5-service-alb --capabilities CAPABILITY_NAMED_IAM --parameter-overrides AppImage=<< parameters.image_name >>
+      - run:
+          name: Echo loadbalancer URL
+          command: |
+            aws cloudformation describe-stacks --stack-name stack5-service-alb | grep http
 
 workflows:
   version: 2.1
@@ -221,14 +223,5 @@ workflows:
       - deploy-cfn:
           context: aws_circleci
           image_name: ${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:${CIRCLE_SHA1}
-          
+  
 
-      
-      # - aws-ecs/deploy-service-update:
-      #     context: aws_circleci
-      #     cluster-name: 'step2-cluster-apptest-Cluster-imTm2jpRjzkv'
-      #     service-name: '${MY_APP_PREFIX}-service'
-      #     family: '${MY_APP_PREFIX}-family'
-      #     container-image-name-updates: 'container=${MY_APP_PREFIX}-container,tag=${CIRCLE_SHA1}'
-      #     requires:
-      #       - aws-ecr/build-and-push-image
