@@ -132,7 +132,7 @@ Parameters:
   DBTableInit:
     Description: 'Initialise database table and demo records?'
     Type: String
-    Default: 'true'
+    Default: 'false'
     AllowedValues: ['true', 'false']
   Cpu:
     Description: 'The minimum number of CPUs to reserve for the container.'
