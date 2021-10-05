@@ -85,13 +85,13 @@ CloudFormation templates: [../cfn/](../cfn/)
 
 3. Setup environment variables in Parameter Store
 
-    - techchallengeapp-VTT_DBUSER
-        - AllowedPattern: ^[a-zA-Z0-9]*$
-    - techchallengeapp-VTT_DBPASSWORD
-        - AllowedPattern: ^[a-zA-Z0-9]*$
-    - techchallengeapp-VTT_DBNAME
+    - Name: `techchallengeapp-VTT_DBUSER`
+        - Value: AllowedPattern: ^[a-zA-Z0-9]*$
+    - Name: `techchallengeapp-VTT_DBPASSWORD`
+        - Value: AllowedPattern: ^[a-zA-Z0-9]*$
+    - Name: `techchallengeapp-VTT_DBNAME`
         - Value: `app`
-    - techchallengeapp-VTT_DBPORT
+    - Name: `techchallengeapp-VTT_DBPORT`
         - Value: `5432`
 
     ![aws-env-setup](images/aws-env-setup.png)
@@ -111,10 +111,10 @@ CloudFormation templates: [../cfn/](../cfn/)
     Otherwise please check if the following resources are in use or in same name:
 
         - VPC: 10.0.0.0/16
-        - RDS DB instance: techchallengeapp-dbinstance
-        - ECS Cluster: techchallengeapp-cluster
-        - ECS Service: techchallengeapp-service
-        - Container name: techchallengeapp-container
+        - RDS DB instance: `techchallengeapp-dbinstance`
+        - ECS Cluster: `techchallengeapp-cluster`
+        - ECS Service: `techchallengeapp-service`
+        - Container name: `techchallengeapp-container`
 
 ### CircleCI Setup
 
@@ -125,10 +125,10 @@ CloudFormation templates: [../cfn/](../cfn/)
         ![circleci-contexts](images/circleci-contexts.png)
         
         - Environment Variables:
-            - AWS_ACCESS_KEY_ID
-            - AWS_SECRET_ACCESS_KEY
-            - AWS_DEFAULT_REGION
-            - AWS_ECR_ACCOUNT_URL
+            - Name: `AWS_ACCESS_KEY_ID`
+            - Name: `AWS_SECRET_ACCESS_KEY`
+            - Name: `AWS_DEFAULT_REGION`
+            - Name: `AWS_ECR_ACCOUNT_URL`
 
         Note: the values for above are from `AWS Environment Setup`
         
@@ -168,7 +168,7 @@ CloudFormation templates: [../cfn/](../cfn/)
 
 ### Verification
 
-1.  Enter the URL(change the ******* part to your default AWS region) printed from the last run to a webbrowser.
+1.  Enter the URL(change the ******* part to your default AWS region, eg `ap-southeast-2`) printed from the last run to a webbrowser.
 
     Expect:
 
