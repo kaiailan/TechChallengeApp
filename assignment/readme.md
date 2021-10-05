@@ -42,7 +42,7 @@ CircleCI pipeline is created to:
     6. Deploy all the relevant infrustructure into AWS (IaaC: CloudFormation)
     7. Return URL of deployed app for test/visit
 
-- Pipeline config file: [../.circleci/config.yml](../.circleci/config.yml)
+Pipeline config file: [../.circleci/config.yml](../.circleci/config.yml)
 
 ```sh
 ./cfn
@@ -53,7 +53,7 @@ CircleCI pipeline is created to:
 └── vpc-2azs.yaml
 ```
 
-- CloudFormation templates: [../cfn/](../cfn/)
+CloudFormation templates: [../cfn/](../cfn/)
 
 ## Prerequisites
 
