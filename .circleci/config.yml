@@ -168,6 +168,8 @@ jobs:
     parameters:
       image_name:
         type: string
+      db_init_flag:
+        type: string
     executor: aws-cli/default
     steps:
       - checkout
@@ -219,6 +221,7 @@ jobs:
             --capabilities CAPABILITY_NAMED_IAM 
             --parameter-overrides 
             AppImage=<< parameters.image_name >> 
+            DBTableInit=<< parameters.db_init_flag >> 
             ParentVPCStack=stack1-vpc 
             ParentDBClientStack=stack2-clientsg 
             ParentDBServiceStack=stack3-rds 
@@ -255,5 +258,6 @@ workflows:
       - deploy-cfn:
           context: aws_circleci
           image_name: ${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}:${CIRCLE_SHA1}
+          db_init_flag: ${DB_INIT_FLAG}
   
 

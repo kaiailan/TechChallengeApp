@@ -136,7 +136,9 @@ CloudFormation templates: [../cfn/](../cfn/)
 
 3. Create Project Environment Variables
     - Name: `MY_APP_PREFIX`
-    - Value: `techchallengeapp`
+        - Value: `techchallengeapp`
+    - Name: `DB_INIT_FLAG`
+        - Value: `true`
 
     ![circleci-project-env](images/circleci-project-env.png)
 
@@ -156,15 +158,13 @@ CloudFormation templates: [../cfn/](../cfn/)
 
     Todo: The default region in URL is marked by circleci automatically. Will create a URL for convenientce in later version.
 
-3.  Change the default parameter 'DBTableInit' from `true` to `false` in [../cfn/service-cluster-alb.yaml](../cfn/service-cluster-alb.yaml)
+3.  Change the project environment variable 'DB_INIT_FLAG' from `true` to `false` in CircleCI portal.
 
-    ![dbinit-setup](images/dbinit-setup-false.png)
+    ![db-init-flag-false](images/dbinit-setup-false.png)
 
-    And submit the changes to GitHub repo. 
+    And next run, the pipeline will update the flag in CloudFormation stack.
 
-    It will trigger the pipeline deploy the new changes to cloud again. 
-
-    So that the appdata will not be removed by the DB init task that created in the first run.
+    So that the existing appdata will not be removed by the new deployment.
 
 ### Verification
 
