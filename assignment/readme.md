@@ -145,13 +145,13 @@ This is the Servian DevOps Tech challenge assignment. Servian provides the Tech 
 
 2.  Check the result, if there's no error, you should be able to access the app through AWS alb URL that printed in the last step of pipeline.
 
-    ![circleci-alb-url.png](images/circleci-alb-url.png.png)
+    ![circleci-alb-url.png](images/circleci-alb-url.png)
 
     Todo: The default region in URL is marked by circleci automatically. Will create a URL for convenientce in later version.
 
 3.  Change the default parameter 'DBTableInit' from `true` to `false` in [../cfn/service-cluster-alb.yaml](../cfn/service-cluster-alb.yaml)
 
-    ![dbinit-setup](images/dbinit-setup.png)
+    ![dbinit-setup](images/dbinit-setup-false.png)
 
     - And submit the changes to GitHub repo. 
     - It will trigger the pipeline deploy the new changes to cloud again. 
