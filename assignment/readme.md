@@ -14,19 +14,25 @@ This is the Servian DevOps Tech challenge assignment. Servian provides the Tech 
 
 ![architecture](images/architecture.png)
 
-- The solution uses AWS for deployment environment:
+The solution uses AWS for deployment environment:
     
     - 2 Availability Zones for HA
+
     - 1 public & 1 private subnets in each Availability Zone for network isolation of frontend and backend(DB instance).
+
     - ECR stores docker images built by pipeline
+
     - ECS Fargate as frontend service provides auto-scaling groups in 2 AZs. 
+
     - RDS postgresql (10.7) as database service also crosses 2 AZs for HA purpose. 
+
     - Application load balancer listens to port:80 for http requests from internet and forwards to the healthy containers under port:3000 managed within cluster. 
+
     - System manager parameter store is used to store environment variables for deployment to prevent expose them in deployment process.
 
 ### CI/CD Pipeline
 
-- CircleCI pipeline is created to:
+CircleCI pipeline is created to:
 
     1. Be triggered by code commition/changes
     2. Pull the lastest version from GitHub repo
@@ -100,8 +106,9 @@ This is the Servian DevOps Tech challenge assignment. Servian provides the Tech 
 
 5. Environment Check 
 
-    - Assume that the solution will be deployed to an empty cloud subscription with no existing infrastructure in place.
-    - Otherwise please check if the following resources are in use or in same name:
+    Assume that the solution will be deployed to an empty cloud subscription with no existing infrastructure in place.
+
+    Otherwise please check if the following resources are in use or in same name:
 
         - VPC: 10.0.0.0/16
         - RDS DB instance: techchallengeapp-dbinstance
@@ -153,9 +160,11 @@ This is the Servian DevOps Tech challenge assignment. Servian provides the Tech 
 
     ![dbinit-setup](images/dbinit-setup-false.png)
 
-    - And submit the changes to GitHub repo. 
-    - It will trigger the pipeline deploy the new changes to cloud again. 
-    - So that the appdata will not be removed by the DB init task that created in the first run.
+    And submit the changes to GitHub repo. 
+
+    It will trigger the pipeline deploy the new changes to cloud again. 
+
+    So that the appdata will not be removed by the DB init task that created in the first run.
 
 ### Verification
 
@@ -176,7 +185,7 @@ This is the Servian DevOps Tech challenge assignment. Servian provides the Tech 
 1.  Optimise the workflow in pipeline, support execute independant cfn templates in parrallel.
 2.  Looking for a secure way to pass on the environment variables to AWS in pipeline other than input them manually.
 3.  DB initialization is not ideal, need to find another way to do it.
-4.  Separate cleanup pipeline to destroy any stacks
+4.  Separate cleanup pipeline to destroy stacks
 
 ##
 
