@@ -4,14 +4,13 @@
 
 This is the Servian DevOps Tech challenge assignment. Servian provides the Tech Challenge to potential candidates, which focuses on deploying this application into a cloud environment of choice. More details about the origial application can be found in the [document folder](../doc/readme.md)
 
-
-# Solution Architecture
-
 ## GitHub repository
 
-[repository name](https://github.com/kaiailan/TechChallengeApp)
+[kaiailan/TechChallengeApp](https://github.com/kaiailan/TechChallengeApp)
 
-## AWS Deployment
+## Solution Architecture
+
+### AWS Deployment
 
 ![architecture](images/architecture.png)
 
@@ -24,13 +23,13 @@ The solution uses AWS for deployment environment.
     - Application load balancer listens to port:80 for http requests from internet and forwards to the healthy containers under port:3000 managed within cluster. 
     - System manager parameter store is used to store environment variables for deployment to prevent expose them in deployment process.
 
-## CI/CD Pipeline
+### CI/CD Pipeline
 
 CircleCI pipeline is created to:
 
     1. Be triggered by code commition/changes
     2. Pull the lastest version from GitHub repo
-    3. Build release version 
+    3. Build release packs 
     4. make docker image
     5. push it onto AWS ECR repo
     6. deploy all the relevant infrustructure into AWS (IaaC: CloudFormation)
@@ -48,7 +47,7 @@ CloudFormation templates: [../cfn/](../cfn/)
 └── vpc-2azs.yaml
 ```
 
-# Prerequisites
+## Prerequisites
 
 1. GitHub account and access
     - be able to fork this repo
@@ -60,12 +59,12 @@ CloudFormation templates: [../cfn/](../cfn/)
     - Access keys for CLI, SDK, & API access
     - ECR Private repository usage
 
-# Instructions for provisioning
+## Instructions for provisioning
 
-## GitHub Setup
+### GitHub Setup
 1. Fork this project to your own repo
 
-## AWS Environment Setup
+### AWS Environment Setup
 1. Use the correct IAM user sign in to the console
 
 2. Generate access key for CLI, SDK, & API access
@@ -86,7 +85,7 @@ CloudFormation templates: [../cfn/](../cfn/)
 
 4. Get AWS_ECR_ACCOUNT_URL
     The URL for your default private registry is `aws_account_id.dkr.ecr.region.amazonaws.com`.
-    The format is ${YOUR_ACCOUNT_ID}.dkr.ecr.${YOUR_DEFAULT_REGION}.amazonaws.com
+    The format is `${YOUR_ACCOUNT_ID}.dkr.ecr.${YOUR_DEFAULT_REGION}.amazonaws.com`
     It also can be found in ECR console page when you are tring to create a new repo.
 
 5. Environment Check 
@@ -98,25 +97,26 @@ CloudFormation templates: [../cfn/](../cfn/)
     - ECS Service: techchallengeapp-service
     - Container name: techchallengeapp-container
 
-## CircleCI Setup
+### CircleCI Setup
 1. Import project from GitHub 
 2. Create Context in Organization Settings
     - Context name: `aws_circleci`
-    ![circleci-contexts](images/circleci-contexts.png)
-        Environment Variables:
-        - AWS_ACCESS_KEY_ID
-        - AWS_SECRET_ACCESS_KEY
-        - AWS_DEFAULT_REGION
-        - AWS_ECR_ACCOUNT_URL
-        Note: the values for above are from `AWS Environment Setup`
-    ![circleci-contexts-env](images/circleci-contexts-env.png)
+        ![circleci-contexts](images/circleci-contexts.png)
+        
+        - Environment Variables:
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+            - AWS_DEFAULT_REGION
+            - AWS_ECR_ACCOUNT_URL
+            Note: the values for above are from `AWS Environment Setup`
+        ![circleci-contexts-env](images/circleci-contexts-env.png)
 
 3. Create Project Environment Variables
     - Name: `MY_APP_PREFIX`
     - Value: `techchallengeapp`
     ![circleci-project-env](images/circleci-project-env.png)
 
-## Deployment
+### Deployment
 1.  Run Pipeline from CircleCI portal for the first time
     As it's the first deployment, it will create the database, table, and insert demo datas.
     ![circleci-run-pipeline](images/circleci-run-pipeline.png)
@@ -130,12 +130,13 @@ CloudFormation templates: [../cfn/](../cfn/)
     It will trigger the pipeline deploy the new changes to cloud again. 
     So that the appdata will not be removed by the DB init task that created in the first run.
 
-# Todo
+## Todo
 1.  Optimise the workflow in pipeline, support execute independant cfn templates in parrallel.
-2.  looking for a secure way to pass on the environment variables to AWS in pipeline other than input them manually.
+2.  Looking for a secure way to pass on the environment variables to AWS in pipeline other than input them manually.
 3.  DB initialization is not ideal, need to find another way to do it.
+4.  Separate cleanup pipeline to destroy any stacks
 
-# Finally
+## Finally
 It's quite a project. I was enjoying the whole process of figuring it out.
 Any issues, please feel free to let me know.
 And thanks for your support.

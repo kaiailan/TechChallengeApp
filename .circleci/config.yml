@@ -173,14 +173,14 @@ jobs:
       - checkout
       - aws-cli/setup
       - run:
-          name: Deploy Cloudformation Template - vpc-2azs.yaml
+          name: Deploy Cloudformation Template - vpc-2azs
           command:
             >-
             aws cloudformation deploy 
             --template cfn/vpc-2azs.yaml 
             --stack stack1-vpc
       - run:
-          name: Deploy Cloudformation Template - client-sg.yaml
+          name: Deploy Cloudformation Template - db-client-sg
           command:
             >-
             aws cloudformation deploy 
@@ -189,8 +189,8 @@ jobs:
             --parameter-overrides 
             ParentVPCStack=stack1-vpc
       - run:
-          name: Deploy Cloudformation Template - rds-postgres.yaml
-          no_output_timeout: 30m
+          name: Deploy Cloudformation Template - rds-postgres
+          no_output_timeout: 45m
           command:
             >-
             aws cloudformation deploy 
@@ -209,7 +209,7 @@ jobs:
             --parameter-overrides 
             ParentVPCStack=stack1-vpc
       - run:
-          name: Deploy Cloudformation Template - service-cluster-alb.yaml
+          name: Deploy Cloudformation Template - service-cluster-alb
           no_output_timeout: 30m
           command:
             >-
