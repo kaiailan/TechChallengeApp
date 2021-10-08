@@ -76,6 +76,7 @@ CloudFormation templates: [../cfn/](../cfn/)
 ### AWS Environment Setup
 
 1. Use the correct IAM user sign in to the console
+    - confirm if you are in the desired region. Otherwise, please switch to the correct region.
 
 2. Generate access key for CLI, SDK, & API access
     - My Security credentials -> Create access key
@@ -182,12 +183,12 @@ CloudFormation templates: [../cfn/](../cfn/)
 
 ## Todo
 
-1.  Optimise the workflow in pipeline, support execute independant cfn templates in parrallel.
+1.  Optimise the workflow in pipeline:
+    - Execute independant cfn templates in parrallel.
+    - Use cache to restore unchanged works in order to reduce build time.
 2.  Looking for a secure way to pass on the environment variables to AWS in pipeline other than input them manually.
 3.  DB initialization is not ideal, need to find another way to do it.
 4.  Separate cleanup pipeline to destroy stacks
-
-##
 
 ## Finally
 
